@@ -10,7 +10,7 @@ app = web.application(urls, globals())
 def InsertLinks():
     contracts = get_all_code()
     for contract in contracts:
-        url = f"http://8.218.127.18:8565/contract?name={contract.name}&addr={contract.address}"
+        url = f"http://8.218.127.18:3000/contract?name={contract.name}&addr={contract.address}"
         insert_playground(contract.name, contract.address, url)
         print(f"Insert contract {contract.name} successfully.")
 

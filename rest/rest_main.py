@@ -12,9 +12,9 @@ class Contract:
         web.header('Access-Control-Allow-Origin', '*')
         web.header('Access-Control-Allow-Credentials', 'true')
         input_param = web.input()
-        if not input_param.name or not input_param.addr:
+        if not input_param.name:
             return ""
-        contract = get_contract(input_param.name, input_param.addr)   
+        contract = get_contract(input_param.name, "")   
         return contract.code
 
 if __name__ == "__main__":

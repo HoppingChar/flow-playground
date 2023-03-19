@@ -123,7 +123,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     if (contract) {
       // project.accounts[0].draftCode
       // var code : string;
-      var url = "http://8.218.127.18:8565/contract?name=" + contract;
+      var url = "http://8.210.160.166:8080/contract?name=" + contract;
 
       fetch(url)
         .then((response) => response.text())

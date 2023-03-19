@@ -1,5 +1,6 @@
 import React from 'react';
-import { Redirect } from '@reach/router';
+import { Redirect, useLocation } from '@reach/router';
+import { parse } from 'query-string'
 
 import { ProjectProvider } from 'providers/Project';
 import CadenceChecker from 'providers/CadenceChecker';
@@ -12,13 +13,18 @@ const Playground: any = (props: any) => {
   const { projectId } = props;
   const isLocalProject = projectId === LOCAL_PROJECT_ID;
 
+  const location = useLocation();
+  const reqParam = parse(location.search);
+  const contract = reqParam.contract === undefined ? null : reqParam.contract;
+
+
   if (!projectId) {
     return <Redirect noThrow to={`/${LOCAL_PROJECT_ID}`} />;
   }
 
   return (
     <Base>
-      <ProjectProvider urlProjectId={isLocalProject ? null : projectId}>
+      <ProjectProvider urlProjectId={isLocalProject ? null : projectId} contract={contract}>
         <CadenceChecker>
           <EditorLayout />
         </CadenceChecker>

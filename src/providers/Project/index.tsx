@@ -8,6 +8,9 @@ import { Account, Project } from 'api/apollo/generated/graphql';
 import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
 import { ChildProps } from 'src/types';
 import { getParams } from 'util/url';
+import { integer } from 'monaco-languageclient';
+
+import http from 'http';
 
 export enum EntityType {
   Account = 1,
@@ -22,6 +25,16 @@ export type ActiveEditor = {
   // TODO: Type onChange functions for each EntityType
   onChange: any;
 };
+
+function sleep(time: number){
+  var timeStamp = new Date().getTime();
+  var endTime = timeStamp + time;
+  while(true){
+    if (new Date().getTime() > endTime){
+      return;
+    } 
+  }
+}
 
 export interface ProjectContextValue {
   project: Project | null;
@@ -75,14 +88,16 @@ export const ProjectContext: React.Context<ProjectContextValue> =
 
 interface ProjectProviderProps extends ChildProps {
   urlProjectId: string | null;
+  contract: string | null;
 }
 
 export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   children,
   urlProjectId,
+  contract,
 }) => {
   const client = useApolloClient();
-
+  
   const {
     data: { activeProject, activeProjectId },
   } = useQuery(GET_ACTIVE_PROJECT, {
@@ -105,6 +120,17 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     project = _project;
     isLocal = _isLocal;
     isLoading = _isLoading;
+    if (contract) {
+      // project.accounts[0].draftCode
+      // var code : string;
+      var url = "http://8.218.127.18:8565/contract?name=" + contract;
+
+      fetch(url)
+        .then((response) => response.text())
+        .then((data) => {project.accounts[0].draftCode = data})
+
+      // project.accounts[0].draftCode = code;
+    }
   } catch (e) {
     navigate('/404');
   }

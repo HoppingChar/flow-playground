@@ -16,6 +16,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    mainFields: ['browser', 'module', 'main'],
     alias: {
       pages: path.resolve(__dirname, 'src/pages'),
       providers: path.resolve(__dirname, 'src/providers'),
@@ -29,7 +30,11 @@ module.exports = {
     fallback: {
       fs: false,
       net: false,
-      util: false,
+      util: require.resolve("util/"),
+      crypto: false,
+      url: false,
+      tls: false,
+      http: false,
     },
   },
   devtool: 'source-map',
@@ -105,6 +110,9 @@ module.exports = {
       'DEFAULT_SEO_IMAGE': '',
       'AVATAAR_URL': 'https://us-central1-flow-developer-playground.cloudfunctions.net/avatar/',
       'SENTRY_DSN': '',
+    }),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
     }),
   ],
 };
